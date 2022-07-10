@@ -1,19 +1,16 @@
 import logo from './logo.svg';
 import './App.css';
-import kimch from './media2.gif';
-import kimchAudio from './kimchAudio.mp3';
-import {useState} from 'react';
+import {Route, Routes } from 'react-router-dom';
+import KimchContainer from './components/KimchContainer';
+import DisplayContainer from './components/displayContainer';
 
 function App() {
-  const [isClicked,setIsClicked] = useState({kimch});
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>kimch</h1>
-        <button onClick={()=>{setIsClicked( prev => !prev)}}>버튼</button>
-        <img src={isClicked ? kimch : null}></img>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<KimchContainer />} />
+      <Route path="/start" element={<DisplayContainer />} />
+    </Routes>
   );
 }
 
