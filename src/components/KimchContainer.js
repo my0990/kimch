@@ -25,10 +25,10 @@ const Container = styled.div`
     }
 `
 
-const KimchContainer = () => {
+const KimchContainer = ( {value, setValue}) => {
     const [isCheckClicked,setIsCheckClicked] = useState(false);
 
-    const [value,setValue] = useState("");
+    // const [value,setValue] = useState("");
     const onSubmit = (e) => {
         e.preventDefault();
         setIsCheckClicked(true);

@@ -12,7 +12,7 @@ const Container = styled.div`
 // 색깔 17개
 const colorArr = ['black','red','purple','fuchsia','green','navy','brown','fuchsia','olive','gray','maroon','darkgreen','indigo','tomato','skyblue']
 
-let tempText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum".split(" ")
+// let tempText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum".split(" ")
 
 const Item = styled.p`
     margin: 10px;
@@ -41,12 +41,15 @@ const getRandomColor = (num) => {
 
 
 
-const DisplayContainer = () => {
+const DisplayContainer = ({value}) => {
+    let tempText = value.split(" ")
+    console.log(tempText)
     const [count,setCount] = useState(0)
     const [renderText,setRenderText] = useState('')
     const [colorCount,setColorCount] = useState(0)
     const [isKimch,setIsKimch] = useState(false);
-
+    // const audio = new Audio(kimchAudio)
+    const [audio,setAudio] = useState(new Audio(kimchAudio))
     const getText = () => {
         let alt = getRandomNumber()
         const tmpArr = getRandomColor(alt)
@@ -61,7 +64,11 @@ const DisplayContainer = () => {
         console.log(renderText)
         console.log('tmpArr: ', tmpArr)
         setColorCount(0)
+        setIsKimch(false)
+        audio.pause()
+        audio.currentTime = 0
     }
+
 
     const makeColorWhite = () => {
         let tmp = [...renderText]
@@ -69,21 +76,24 @@ const DisplayContainer = () => {
         setRenderText(tmp)
         setColorCount(colorCount+1)
         if(colorCount == tmp.length-1){
-            setIsKimch(true)
-            // audio.play()
+            let temp = Math.random()
+            if(temp > 0.5){
+                setIsKimch(true)
+                audio.play()
+            } else {
+                getText()
+            }
+            
         }
     }
     useEffect(()=>{
-        setTimeout(function(){
-            setIsKimch(false)
-            console.log('test')
-        },7000)
-    },[setIsKimch])
+        getText()
+    },[])
 
     
     
     
-    let audio = new Audio(kimchAudio)
+    
     return(
         <Container>
             {isKimch 
@@ -93,11 +103,11 @@ const DisplayContainer = () => {
                 (item) => <Item style={{color:item[1]}}>{item[0]}</Item>
             )}
             
-           
+           {isKimch && <button onClick={getText}>next</button>}
             <img src={isKimch ? kimch: null} />
-            <button onClick={()=>{setIsKimch(!isKimch)}}>kimch</button>
-            <button onClick={getText}>test</button>
-            <button onClick={makeColorWhite}>test2</button>
+            {/* <button onClick={()=>{setIsKimch(!isKimch)}}>kimch</button> */}
+            {!isKimch && <button onClick={makeColorWhite}>test2</button>}
+
         </Container>
     )
 }
