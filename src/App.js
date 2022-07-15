@@ -6,7 +6,7 @@ import DisplayContainer from './components/displayContainer';
 import {useState} from 'react';
 
 function App() {
-  const [value,setValue] = useState("");
+  const [value,setValue] = useState([]);
   return (
     <Routes>
       <Route path="/" element={<KimchContainer value={value} setValue={setValue}/>} />

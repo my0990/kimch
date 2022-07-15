@@ -27,14 +27,19 @@ const Container = styled.div`
 
 const KimchContainer = ( {value, setValue}) => {
     const [isCheckClicked,setIsCheckClicked] = useState(false);
+    const [text,setText] = useState('');
 
     // const [value,setValue] = useState("");
     const onSubmit = (e) => {
         e.preventDefault();
         setIsCheckClicked(true);
+        let tmp = [...value]
+        tmp.push(text)
+        setValue(tmp)
+        console.log(tmp)
     }
     const onChange = (e) => {
-        setValue(e.target.value)
+        setText(e.target.value)
     }
 
     return(
@@ -44,12 +49,12 @@ const KimchContainer = ( {value, setValue}) => {
                 <textarea onChange={onChange}></textarea>
                 <div className="wrapper">
                     {isCheckClicked && 
-                        value.split(" ").map(
+                        value.map(
                             (item) => <p>"{item}"</p>
                         )
                     }
                 </div>
-                {!isCheckClicked && <button onClick={onSubmit}>확인</button>}
+                <button onClick={onSubmit}>확인</button>
                 {isCheckClicked && <Link to="start"><div>시작</div></Link>}
                 
             </form>
