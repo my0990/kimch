@@ -23,10 +23,6 @@ const Item = styled.p`
 //     return "#" + Math.floor(Math.random() * 16777215).toString(16);
 // }
 
-// 단어의 갯수 3~7개
-const getRandomNumber = () => {
-    return Math.floor(Math.random()*3) + 4
-}
 
 // num길이의 무작위 색깔배열 반환
 const getRandomColor = (num) => {
@@ -42,8 +38,6 @@ const getRandomColor = (num) => {
 
 
 const DisplayContainer = ({value}) => {
-    let tempText = value.split(" ")
-    console.log(tempText)
     const [count,setCount] = useState(0)
     const [renderText,setRenderText] = useState('')
     const [colorCount,setColorCount] = useState(0)
@@ -51,19 +45,24 @@ const DisplayContainer = ({value}) => {
     // const audio = new Audio(kimchAudio)
     const [audio,setAudio] = useState(new Audio(kimchAudio))
     const getText = () => {
-        let alt = getRandomNumber()
-        const tmpArr = getRandomColor(alt)
-        let temp = []
-        console.log(temp == renderText)
-        let j = 0
-        for (let i = count; i < count + alt; i++) {
-            temp.push([tempText[i],tmpArr[j++]])
+        // let alt = getRandomNumber()
+        console.log('count: ', count)
+        console.log('value: ', value.length)
+        if(value.length == 0 || count == value.length){
+            return false
         }
-        setCount(prev => prev + alt)
+        let tempText = value[count].split(" ") //매 라운드 문장
+        const tmpColorArr = getRandomColor(tempText.length) //매 라운드 단어 수만큼의 색깔 배열 
+        let temp = []  //단어와 색깔 매치 ex) [['hello','red']]
+
+        for (let i = 0; i < tempText.length; i++) {
+            temp.push([tempText[i],tmpColorArr[i]])
+            console.log(i)
+        }
+        console.log('temp: ', temp)
+        setCount(prev => prev + 1)
         setRenderText(temp)
-        console.log(renderText)
-        console.log('tmpArr: ', tmpArr)
-        setColorCount(0)
+        setColorCount(0);
         setIsKimch(false)
         audio.pause()
         audio.currentTime = 0
@@ -72,10 +71,7 @@ const DisplayContainer = ({value}) => {
 
     const makeColorWhite = () => {
         let tmp = [...renderText]
-        tmp[colorCount][1] = 'white'
-        setRenderText(tmp)
-        setColorCount(colorCount+1)
-        if(colorCount == tmp.length-1){
+        if(colorCount == tmp.length){
             let temp = Math.random()
             if(temp > 0.5){
                 setIsKimch(true)
@@ -83,8 +79,15 @@ const DisplayContainer = ({value}) => {
             } else {
                 getText()
             }
+        } else {
             
+            console.log('tmp: ', tmp)
+            tmp[colorCount][1] = 'white'
+            setRenderText(tmp)
+            setColorCount(colorCount+1)
         }
+
+        
     }
     useEffect(()=>{
         getText()
@@ -94,22 +97,24 @@ const DisplayContainer = ({value}) => {
     
     
     
-    return(
-        <Container>
-            {isKimch 
-            ? null
-            :renderText && 
-            renderText.map(
-                (item) => <Item style={{color:item[1]}}>{item[0]}</Item>
-            )}
-            
-           {isKimch && <button onClick={getText}>next</button>}
-            <img src={isKimch ? kimch: null} />
-            {/* <button onClick={()=>{setIsKimch(!isKimch)}}>kimch</button> */}
-            {!isKimch && <button onClick={makeColorWhite}>test2</button>}
+        return(
+            <Container>
+                {isKimch 
+                ? null
+                :renderText && 
+                renderText.map(
+                    (item) => <Item style={{color:item[1]}}>{item[0]}</Item>
+                )}
+                
+               {isKimch && <button onClick={getText}>next</button>}
+                <img src={isKimch ? kimch: null} />
+                {/* <button onClick={()=>{setIsKimch(!isKimch)}}>kimch</button> */}
+                {!isKimch && <button onClick={makeColorWhite}>test2</button>}
+    
+            </Container>
+        )
+    }
 
-        </Container>
-    )
-}
+
 
 export default DisplayContainer;
