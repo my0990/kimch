@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from 'react-router-dom'
 
 
@@ -24,33 +24,41 @@ const Container = styled.div`
         margin: 0 auto;
     }
 `
-
+// value,setValue props로 받아오기
 const KimchContainer = ( {value, setValue}) => {
     const [isCheckClicked,setIsCheckClicked] = useState(false);
-
-    // const [value,setValue] = useState("");
     const onSubmit = (e) => {
         e.preventDefault();
         setIsCheckClicked(true);
+        let tmpText = [...value, ...inputRef.current.value.split('\n')]
+        setValue(tmpText);
+        inputRef.current.value = '';
+        inputRef.current.focus();
+        console.log(value)
+        
     }
-    const onChange = (e) => {
-        setValue(e.target.value)
-    }
+    // const onChange = (e) => {
+    //     setValue(e.target.value)
+    // }
+
+    // 입력값 ref
+    const inputRef = useRef()
 
     return(
         <Container>
             <h1>문장을 입력하세요</h1>
             <form>
-                <textarea onChange={onChange}></textarea>
+                <textarea ref={inputRef}></textarea>
                 <div className="wrapper">
                     {isCheckClicked && 
-                        value.split(" ").map(
+                        value.map(
                             (item) => <p>"{item}"</p>
                         )
                     }
                 </div>
-                {!isCheckClicked && <button onClick={onSubmit}>확인</button>}
-                {isCheckClicked && <Link to="start"><div>시작</div></Link>}
+                <button onClick={onSubmit}>확인</button>
+                {/* {!isCheckClicked && <button onClick={onSubmit}>확인</button>}
+                {isCheckClicked && <Link to="start"><div>시작</div></Link>} */}
                 
             </form>
 
