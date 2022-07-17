@@ -1,13 +1,28 @@
 import styled from "styled-components";
+import Button from 'react-bootstrap/Button'
 import { useState, useRef } from "react";
 import { Link } from 'react-router-dom'
 
 
 const Container = styled.div`
     text-align: center;
-    textarea {
+    min-width: 1190px;
+    margin-top: 100px;
+    .inputWrapper {
+        border: 1px solid black;
         width: 80%;
         height: 300px;
+        margin: auto;
+        padding: 10px;
+        textarea {
+            width: 100%;
+            height: 80%;
+            border: none;
+            outline: none;
+            ::-webkit-resizer {
+                display: none;
+            }
+        }
     }
     .wrapper {
         display: flex;
@@ -18,19 +33,22 @@ const Container = styled.div`
         p {
             margin: 10px;
         }
+        
     }
-    button {
-        display: block;
-        margin: 0 auto;
+    .nextBtn {
+        margin: 30px;
     }
+
 `
 // value,setValue props로 받아오기
 const KimchContainer = ( {value, setValue}) => {
-    const [isCheckClicked,setIsCheckClicked] = useState(false);
     const onSubmit = (e) => {
+        if(!isReady){
+            setIsReady(true);
+        }
         e.preventDefault();
-        setIsCheckClicked(true);
         let tmpText = [...value, ...inputRef.current.value.split('\n')]
+        tmpText = tmpText.filter(word => word.length > 0)
         setValue(tmpText);
         inputRef.current.value = '';
         inputRef.current.focus();
@@ -43,22 +61,31 @@ const KimchContainer = ( {value, setValue}) => {
 
     // 입력값 ref
     const inputRef = useRef()
-
+    const [isReady,setIsReady] = useState(false);
     return(
         <Container>
-            <h1>문장을 입력하세요</h1>
+            <h1>김치게임</h1>
             <form>
-                <textarea ref={inputRef}></textarea>
+                {/* <div className="textArea">
+                    <textarea ref={inputRef}></textarea>
+                    <Button className="button" variant="outline-dark" onClick={onSubmit}>문장추가</Button>
+                </div> */}
+                <div className="inputWrapper">
+                    <textarea ref={inputRef} placeholder="문장을 입력하세요"></textarea>
+                    <Button className="button" variant="outline-dark" onClick={onSubmit}>문장추가</Button>
+                </div>
                 <div className="wrapper">
-                    {isCheckClicked && 
+                    {
                         value.map(
-                            (item) => <p>"{item}"</p>
+                            (item) => <p>'{item}'</p>
                         )
                     }
                 </div>
-                <button onClick={onSubmit}>확인</button>
-                {/* {!isCheckClicked && <button onClick={onSubmit}>확인</button>}
-                {isCheckClicked && <Link to="start"><div>시작</div></Link>} */}
+                {isReady &&
+                <Link to="start" >
+                    <Button className="nextBtn" variant="outline-danger" >김치게임 시작</Button>
+                </Link>
+                }
                 
             </form>
 

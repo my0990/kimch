@@ -18,6 +18,7 @@ const Item = styled.p`
     margin: 10px;
     font-size: 140px;
     font-weight: bold;
+    text-shadow: -3px 0px black, 0px 3px black, 3px 0px black, 0px -3px black;
 `
 // const getRandomColor = () => {
 //     return "#" + Math.floor(Math.random() * 16777215).toString(16);
