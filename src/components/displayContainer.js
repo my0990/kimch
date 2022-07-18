@@ -7,6 +7,25 @@ import kimchAudio from '../kimchAudio.mp3';
 const Container = styled.div`
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    min-width: 1190px;
+    height: 100vh;
+    .kimchBtn {
+        position: absolute;
+        bottom: 0;
+    };
+    img {
+        width: 100%;
+    }
+`
+
+const Wrapper = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
 `
 
 // 색깔 17개
@@ -16,7 +35,7 @@ const colorArr = ['black','red','purple','fuchsia','green','navy','brown','fuchs
 
 const Item = styled.p`
     margin: 10px;
-    font-size: 140px;
+    font-size: 150px;
     font-weight: bold;
     text-shadow: -3px 0px black, 0px 3px black, 3px 0px black, 0px -3px black;
 `
@@ -72,7 +91,7 @@ const DisplayContainer = ({value}) => {
 
     const makeColorWhite = () => {
         let tmp = [...renderText]
-        if(colorCount == tmp.length){
+        if(colorCount == tmp.length-1){
             let temp = Math.random()
             if(temp > 0.5){
                 setIsKimch(true)
@@ -81,14 +100,11 @@ const DisplayContainer = ({value}) => {
                 getText()
             }
         } else {
-            
             console.log('tmp: ', tmp)
             tmp[colorCount][1] = 'white'
             setRenderText(tmp)
             setColorCount(colorCount+1)
         }
-
-        
     }
     useEffect(()=>{
         getText()
@@ -100,18 +116,18 @@ const DisplayContainer = ({value}) => {
     
         return(
             <Container>
-                {isKimch 
-                ? null
-                :renderText && 
-                renderText.map(
-                    (item) => <Item style={{color:item[1]}}>{item[0]}</Item>
-                )}
-                
-               {isKimch && <button onClick={getText}>next</button>}
+                <Wrapper>
+                    {isKimch 
+                    ? null
+                    :renderText && 
+                    renderText.map(
+                        (item) => <Item style={{color:item[1]}}>{item[0]}</Item>
+                    )}
+                </Wrapper>
                 <img src={isKimch ? kimch: null} />
-                {/* <button onClick={()=>{setIsKimch(!isKimch)}}>kimch</button> */}
-                {!isKimch && <button onClick={makeColorWhite}>test2</button>}
-    
+                {isKimch && <button onClick={getText} className="kimchBtn">next</button>}
+                {!isKimch && <button onClick={makeColorWhite} className="kimchBtn">spacebar</button>}
+                
             </Container>
         )
     }
