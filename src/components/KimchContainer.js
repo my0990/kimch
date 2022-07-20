@@ -40,28 +40,33 @@ const Container = styled.div`
     }
 
 `
+let id = 0
 // value,setValue props로 받아오기
 const KimchContainer = ( {value, setValue}) => {
+    const inputRef = useRef()
+    const [isReady,setIsReady] = useState(false);
+    
     const onSubmit = (e) => {
         if(!isReady){
             setIsReady(true);
         }
         e.preventDefault();
-        let tmpText = [...value, ...inputRef.current.value.split('\n')]
-        tmpText = tmpText.filter(word => word.length > 0)
-        setValue(tmpText);
+        let tmpWord = []
+        let tmpText = inputRef.current.value.split('\n').filter(word => word.length > 0);
+        tmpText.forEach(element => tmpWord.push({id: id++, text: element}))
+        console.log('tmpWord: ', tmpWord)
+        // let tmpText = [...value, ...inputRef.current.value.split('\n')]
+        // tmpText = tmpText.filter(word => word.length > 0)
+        setValue([...value, ...tmpWord]);
         inputRef.current.value = '';
         inputRef.current.focus();
-        console.log(value)
+        console.log('value: ', value)
         
     }
-    // const onChange = (e) => {
-    //     setValue(e.target.value)
-    // }
+    const onRemove = id => {
+        setValue(value.filter(item => item.id != id));
+    }
 
-    // 입력값 ref
-    const inputRef = useRef()
-    const [isReady,setIsReady] = useState(false);
     return(
         <Container>
             <h1>김치게임</h1>
@@ -77,13 +82,13 @@ const KimchContainer = ( {value, setValue}) => {
                 <div className="wrapper">
                     {
                         value.map(
-                            (item) => <p>'{item}'</p>
+                            (item) => <p key={item.id} onClick={()=>{onRemove(item.id)}}>'{item.text}'</p>
                         )
                     }
                 </div>
                 {isReady &&
                 <Link to="start" >
-                    <Button className="nextBtn" variant="outline-danger" >김치게임 시작</Button>
+                    <Button className="nextBtn" variant="outline-danger">김치게임 시작</Button>
                 </Link>
                 }
                 

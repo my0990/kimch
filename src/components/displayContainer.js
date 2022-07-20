@@ -110,12 +110,16 @@ const DisplayContainer = ({value}) => {
         getText()
     },[])
 
-    
+
     
     
     
         return(
-            <Container>
+            <Container
+                tabIndex="0"
+                onKeyDown={makeColorWhite}
+                >
+                {console.log('test')}
                 <Wrapper>
                     {isKimch 
                     ? null
@@ -125,9 +129,8 @@ const DisplayContainer = ({value}) => {
                     )}
                 </Wrapper>
                 <img src={isKimch ? kimch: null} />
-                {isKimch && <button onClick={getText} className="kimchBtn">next</button>}
-                {!isKimch && <button onClick={makeColorWhite} className="kimchBtn">spacebar</button>}
                 
+                {!isKimch && <button onClick={makeColorWhite} className="kimchBtn">spacebar</button>}
             </Container>
         )
     }
