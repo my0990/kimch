@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useEffect  } from "react";
+import { useState, useEffect, useRef  } from "react";
 import kimch from '../media2.gif'
 import kimchAudio from '../kimchAudio.mp3';
 
@@ -38,6 +38,7 @@ const Item = styled.p`
     font-size: 150px;
     font-weight: bold;
     text-shadow: -3px 0px black, 0px 3px black, 3px 0px black, 0px -3px black;
+    
 `
 // const getRandomColor = () => {
 //     return "#" + Math.floor(Math.random() * 16777215).toString(16);
@@ -62,16 +63,17 @@ const DisplayContainer = ({value}) => {
     const [renderText,setRenderText] = useState('')
     const [colorCount,setColorCount] = useState(0)
     const [isKimch,setIsKimch] = useState(false);
+    const focusRef = useRef();
     // const audio = new Audio(kimchAudio)
     const [audio,setAudio] = useState(new Audio(kimchAudio))
     const getText = () => {
         // let alt = getRandomNumber()
         console.log('count: ', count)
-        console.log('value: ', value.length)
+        console.log('value: ', value)
         if(value.length == 0 || count == value.length){
             return false
         }
-        let tempText = value[count].split(" ") //매 라운드 문장
+        let tempText = value[count].text.split(" ") //매 라운드 문장
         const tmpColorArr = getRandomColor(tempText.length) //매 라운드 단어 수만큼의 색깔 배열 
         let temp = []  //단어와 색깔 매치 ex) [['hello','red']]
 
@@ -107,7 +109,8 @@ const DisplayContainer = ({value}) => {
         }
     }
     useEffect(()=>{
-        getText()
+        getText();
+        focusRef.current.focus();
     },[])
 
 
@@ -118,6 +121,7 @@ const DisplayContainer = ({value}) => {
             <Container
                 tabIndex="0"
                 onKeyDown={makeColorWhite}
+                ref= {focusRef}
                 >
                 {console.log('test')}
                 <Wrapper>

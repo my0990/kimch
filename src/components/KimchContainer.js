@@ -32,6 +32,10 @@ const Container = styled.div`
         flex-wrap: wrap;
         p {
             margin: 10px;
+            cursor: pointer;
+        };
+        p:hover{
+            color: red;
         }
         
     }
@@ -60,11 +64,16 @@ const KimchContainer = ( {value, setValue}) => {
         setValue([...value, ...tmpWord]);
         inputRef.current.value = '';
         inputRef.current.focus();
-        console.log('value: ', value)
+        console.log('value: ', value);
+        
         
     }
     const onRemove = id => {
         setValue(value.filter(item => item.id != id));
+    }
+
+    const onShuffle = () => {
+        console.log("shuffled")
     }
 
     return(
@@ -93,7 +102,7 @@ const KimchContainer = ( {value, setValue}) => {
                 }
                 
             </form>
-
+            <button onClick={onShuffle}>shuffle</button>
         </Container>
     )
 }
