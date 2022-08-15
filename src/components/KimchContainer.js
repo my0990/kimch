@@ -57,6 +57,7 @@ const KimchContainer = ( {value, setValue}) => {
         e.preventDefault();
         let tmpWord = []
         let tmpText = inputRef.current.value.split('\n').filter(word => word.length > 0);
+        console.log('tmpText: ', tmpText)
         tmpText.forEach(element => tmpWord.push({id: id++, text: element}))
         console.log('tmpWord: ', tmpWord)
         // let tmpText = [...value, ...inputRef.current.value.split('\n')]
@@ -73,7 +74,9 @@ const KimchContainer = ( {value, setValue}) => {
     }
 
     const onShuffle = () => {
-        console.log("shuffled")
+        let tmp = [...value]
+        tmp.sort(()=> Math.random() -0.5);
+        setValue([...tmp])
     }
 
     return(
@@ -95,14 +98,14 @@ const KimchContainer = ( {value, setValue}) => {
                         )
                     }
                 </div>
-                {isReady &&
+                {value.length ?
                 <Link to="start" >
                     <Button className="nextBtn" variant="outline-danger">김치게임 시작</Button>
-                </Link>
+                </Link> : null
                 }
                 
             </form>
-            <button onClick={onShuffle}>shuffle</button>
+            <Button onClick={onShuffle}>shuffle</Button>
         </Container>
     )
 }
